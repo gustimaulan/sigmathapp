@@ -107,8 +107,9 @@ class StudentResource extends Resource
 
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                ->color('warning'),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -131,5 +132,11 @@ class StudentResource extends Resource
             'create' => Pages\CreateStudent::route('/create'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        // return students with is_active = true
+        return static::getModel()::where('is_active', true)->count();
     }
 }

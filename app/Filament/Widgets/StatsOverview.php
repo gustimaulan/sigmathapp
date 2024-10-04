@@ -53,7 +53,7 @@ class StatsOverview extends BaseWidget
         // Sum the fees for each presence record (not just unique students)
         $totalFee = $queryPresence->with('student') // Eager load the related student
             ->get() // Get the presences
-            ->sum(fn($presence) => $presence->student->fee ?? 0); // Sum student fees per presence
+            ->sum(fn($presence) => $presence->student->price - $presence->student->fee ?? 0); // Sum student fees per presence
 
         $totalProfit = $totalPrice - $totalFee;
         // Get the count of unique students
@@ -65,26 +65,26 @@ class StatsOverview extends BaseWidget
         // Conditional logic for adding the 'Total Fees' or 'Total Profit' stat
         if (!$user->hasRole('super_admin')) {
             $stats[] = Stat::make('Estimated Fees', $totalFee)
-                ->description('Rp. ')
-                ->color('success')
-                ->descriptionIcon('heroicon-s-wallet');
+                ->description('Rp.')
+                ->descriptionColor('success')
+                ->descriptionIcon('heroicon-s-circle-stack');
         } else {
             $stats[] = Stat::make('Estimated Profit', $totalProfit)
-                ->description('Rp. ')
-                ->color('success')
-                ->descriptionIcon('heroicon-s-currency-dollar');
+                ->description('Rp.')
+                ->descriptionColor('success')
+                ->descriptionIcon('heroicon-s-circle-stack');
         }
 
         // Other stats (Total Presences, Total Unique Students)
         $stats[] = Stat::make('Total Presences', $totalRecords)
-            ->description('Presences')
-            ->color('primary')
-            ->descriptionIcon('heroicon-s-rectangle-stack');
+            ->description('Entries')
+            ->descriptionColor('success')
+            ->descriptionIcon('heroicon-s-user-group');
 
         $stats[] = Stat::make('Total Unique Students', $totalStudents)
-            ->description('Students')
-            ->color('primary')
-            ->descriptionIcon('heroicon-s-user-group');
+            ->description('Count')
+            ->descriptionColor('success')
+            ->descriptionIcon('heroicon-s-user');
 
 
         // Return a stats overview card with the total record count

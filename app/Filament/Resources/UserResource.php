@@ -64,25 +64,23 @@ class UserResource extends Resource
                                         /** @var \App\Models\User $currentUser */
                                         $currentUser = Auth::user();
                                         return $currentUser->hasRole('super_admin');
-                                        
                                     }),
                             ]),
                     ]),
-                    // Second Group
-                    // First Group
+                // Second Group
+                // First Group
                 Forms\Components\Group::make()
-                ->schema([
-                    Forms\Components\Section::make()
-                        ->schema([
-                            Forms\Components\FileUpload::make('avatar')
-                            ->label('Profile Picture')
-                            ->image()
-                            ->maxSize(1024)
-                            ->nullable(true)
-                        ])
-                ])
-                ]);
-                    
+                    ->schema([
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\FileUpload::make('avatar')
+                                    ->label('Profile Picture')
+                                    ->image()
+                                    ->maxSize(1024)
+                                    ->nullable(true)
+                            ])
+                    ])
+            ]);
     }
 
 
@@ -100,8 +98,8 @@ class UserResource extends Resource
             })
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
-                ->label('Profile Picture')
-                ->circular(),
+                    ->label('Profile Picture')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -128,6 +126,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->color('warning'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -152,4 +152,5 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
-}
+
+    }

@@ -83,21 +83,27 @@ class PresenceResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->description(fn(Presence $record): string => $record->student->level),
-                Tables\Columns\TextColumn::make('student.price')
-                    ->label('Class Price')
-                    ->numeric()
-                    ->prefix('Rp. ')
-                    ->visible(fn(): bool => $User->hasRole('super_admin')),
-                Tables\Columns\TextColumn::make('student.fee')
-                    ->label('Tutor Fee')
-                    ->numeric()
-                    ->prefix('Rp. '),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Date Time')
                     ->sortable()
                     ->searchable()
                     ->date()
                     ->description(fn(Presence $record): string => $record->time),
+                Tables\Columns\TextColumn::make('student.price')
+                    ->label('Class Price')
+                    ->numeric()
+                    ->prefix('Rp. ')
+                    ->visible(fn(): bool => $User->hasRole('super_admin')),
+                Tables\Columns\TextColumn::make('price_fee_difference')
+                    ->label('Tutor Fee')
+                    ->numeric()
+                    ->getStateUsing(fn($record) => $record->student->price - $record->student->fee) // Calculate the difference
+                    ->prefix('Rp. '),
+                Tables\Columns\TextColumn::make('student.fee')
+                    ->label('Fee')
+                    ->numeric()
+                    ->prefix('Rp. ')
+                    ->visible(fn(): bool => $User->hasRole('super_admin')),
                 Tables\Columns\ImageColumn::make('image_doc')
                     ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
